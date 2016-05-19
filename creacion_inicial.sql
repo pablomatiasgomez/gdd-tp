@@ -31,12 +31,17 @@ CREATE TABLE CLAVE_MOTOR.Funcionalidad (
 	)
 GO
 
+
+
 CREATE TABLE CLAVE_MOTOR.FuncionalidadRol (
 	furo_idFuncionalidad  int REFERENCES CLAVE_MOTOR.Funcionalidad NOT NULL,
 	furo_idRol  int REFERENCES CLAVE_MOTOR.Rol NOT NULL,
 	PRIMARY KEY(furo_idFuncionalidad, furo_idRol)
 	)
 GO
+
+
+
 
 CREATE TABLE CLAVE_MOTOR.Usuario (
 	usua_id int IDENTITY(1,1) PRIMARY KEY,
@@ -179,6 +184,71 @@ CREATE TABLE CLAVE_MOTOR.ItemFactura (
 GO
 
 
+
+ALTER TABLE CLAVE_MOTOR.FuncionalidadRol ADD CONSTRAINT fk_Func_IDFunc
+FOREIGN KEY (furo_idFuncionalidad) REFERENCES CLAVE_MOTOR.Funcionalidad(rol_id)
+
+ALTER TABLE CLAVE_MOTOR.FuncionalidadRol ADD CONSTRAINT fk_Func_IDRol
+FOREIGN KEY (furo_idRol) REFERENCES CLAVE_MOTOR.Rol(rol_id)
+
+ALTER TABLE CLAVE_MOTOR.ItemFactura ADD CONSTRAINT fk_Func_ItemFactura
+FOREIGN KEY (item_idFactura) REFERENCES CLAVE_MOTOR.Factura(fact_id)
+
+ALTER TABLE CLAVE_MOTOR.Factura ADD CONSTRAINT fk_Fact_IDMediPago
+FOREIGN KEY (fact_idMedioPago) REFERENCES CLAVE_MOTOR.MedioPago(medi_id)
+
+ALTER TABLE CLAVE_MOTOR.Factura ADD CONSTRAINT fk_Fact_IDUsuario
+FOREIGN KEY (fact_idUsuario) REFERENCES CLAVE_MOTOR.Usuario(usua_id)
+
+ALTER TABLE CLAVE_MOTOR.Publicacion ADD CONSTRAINT fk_Publ_idVisibilidad
+FOREIGN KEY (publ_idVisibilidad) REFERENCES CLAVE_MOTOR.Visibilidad(visi_id)
+
+ALTER TABLE CLAVE_MOTOR.Publicacion ADD CONSTRAINT fk_Publ_idUsuario
+FOREIGN KEY (publ_idUsuario) REFERENCES CLAVE_MOTOR.Usuario(usua_id)
+
+ALTER TABLE CLAVE_MOTOR.Publicacion ADD CONSTRAINT fk_Publ_IDRubro
+FOREIGN KEY (publ_idRubro) REFERENCES CLAVE_MOTOR.Rubro(rubr_id)
+
+ALTER TABLE CLAVE_MOTOR.Factura ADD CONSTRAINT fk_Fact_IDUsuario
+FOREIGN KEY (fact_idUsuario) REFERENCES CLAVE_MOTOR.Usuario(usua_id)
+
+ALTER TABLE CLAVE_MOTOR.Usuario ADD CONSTRAINT fk_Usu_IDRol
+FOREIGN KEY (usua_idRol) REFERENCES CLAVE_MOTOR.Rol(rol_id)
+
+ALTER TABLE CLAVE_MOTOR.Empresa ADD CONSTRAINT fk_Emp_IDUsuario
+FOREIGN KEY (empr_idUsuario) REFERENCES CLAVE_MOTOR.Usuario(usua_id)
+
+ALTER TABLE CLAVE_MOTOR.Empresa ADD CONSTRAINT fk_Emp_IDDomicilio
+FOREIGN KEY (empr_idDomicilio) REFERENCES CLAVE_MOTOR.Domicilio(domi_id)
+
+ALTER TABLE CLAVE_MOTOR.Cliente ADD CONSTRAINT fk_Clie_IDUsuario
+FOREIGN KEY (clie_idUsuario) REFERENCES CLAVE_MOTOR.Usuario(usua_id)
+
+ALTER TABLE CLAVE_MOTOR.Cliente ADD CONSTRAINT fk_Clie_IDDomicilio
+FOREIGN KEY (clie_idDomicilio) REFERENCES CLAVE_MOTOR.Domicilio(domi_id)
+
+ALTER TABLE CLAVE_MOTOR.Oferta ADD CONSTRAINT fk_Ofer_IDPublicacion
+FOREIGN KEY (ofer_idPublicacion) REFERENCES CLAVE_MOTOR.Publicacion(publ_id)
+
+ALTER TABLE CLAVE_MOTOR.Oferta ADD CONSTRAINT fk_Fact_IDUsuario
+FOREIGN KEY (ofer_idUsuario) REFERENCES CLAVE_MOTOR.Usuario(usua_id)
+
+ALTER TABLE CLAVE_MOTOR.Compra ADD CONSTRAINT fk_Comp_IDUsuario
+FOREIGN KEY (comp_idUsuario) REFERENCES CLAVE_MOTOR.Usuario(usua_id)
+
+ALTER TABLE CLAVE_MOTOR.Compra ADD CONSTRAINT fk_Comp_IDPublicacion
+FOREIGN KEY (comp_idPublicacion) REFERENCES CLAVE_MOTOR.Publicacion(publ_id)
+
+ALTER TABLE CLAVE_MOTOR.Calificacion ADD CONSTRAINT fk_Cali_IDUsuario
+FOREIGN KEY (cali_idUsuario) REFERENCES CLAVE_MOTOR.Usuario(usua_id)
+
+ALTER TABLE CLAVE_MOTOR.Calificacion ADD CONSTRAINT fk_Cali_IDCompra
+FOREIGN KEY (cali_idCompra) REFERENCES CLAVE_MOTOR.Compra(comp_id)
+
+
+/*****************************************************************/
+
+
 /*****************************************************************/
 /************************** MIGRACION ****************************/
 /*****************************************************************/
@@ -210,4 +280,9 @@ INSERT INTO CLAVE_MOTOR.Publicacion (
       ,[Publicacion_Rubro_Descripcion] /* TODO ESTO DEBERIA SER EL ID PREVIAMENTE GENERADO */
 	FROM gd_esquema.Maestra
 GO
+
+
+
+
+
 
