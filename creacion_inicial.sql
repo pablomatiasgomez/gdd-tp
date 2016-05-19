@@ -279,6 +279,31 @@ INSERT INTO CLAVE_MOTOR.Publicacion (
       
       ,[Publicacion_Rubro_Descripcion] /* TODO ESTO DEBERIA SER EL ID PREVIAMENTE GENERADO */
 	FROM gd_esquema.Maestra
+	
+	
+	
+INSERT INTO CLAVE_MOTOR.Cliente (
+	clie_idUsuario,
+	clie_tipoDocumento,
+	clie_documento,
+	clie_nombre,
+	clie_apellido,
+	clie_fechaNacimiento,
+	clie_mail,
+	clie_telefono,
+	clie_idDomicilio )
+	
+	SELECT [id_Usuario],
+		   [
+	/*TODO*/
+	FROM  gd_esquema.Maestra, 
+	/*TODO*/
+	
+INSERT INTO CLAVE_MOTOR.Rubro (rubr_descripcionCorta, rubr_descripcionLarga)
+SELECT DISTINCT Publicacion_Rubro_Descripcion, ('Sin Descripcion')
+FROM gd_esquema.Maestra
+	
+	
 GO
 
 
