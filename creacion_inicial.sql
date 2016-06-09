@@ -419,6 +419,21 @@ FROM gd_esquema.Maestra);
 
 
 ---------------------------------------------------------------------------
+/*
+* Las publicaciones pueden ser de tipo Compra Directa o Subasta.
+* Para el codigo de las publicaciones existentes en el sistema se usara el mismo
+* que tenian para mantener consistencia. Los de las nuevas seran autogenerados.
+* Tipo: Compra Inmediata = 1
+		Subasta = 2
+* Estado: Publicada = 1
+		Otro = 0 no hay publicaciones que no esten publicadas en el sistema actual
+* TODO: EL PRECIO PARECE SER EL FINAL, CALCULAR EL PRECIO ANTES DE APLICARSE EL 
+* PORCENTAJE DE POR VISIBILIDAD.
+*/
+
+PRINT 'Tabla Publicacion'
+GO
+
 CREATE TABLE CLAVE_MOTOR.Publicacion (
 	publ_id int IDENTITY(1,1) PRIMARY KEY,
 	publ_descripcion nvarchar(50) NOT NULL,
@@ -434,6 +449,29 @@ CREATE TABLE CLAVE_MOTOR.Publicacion (
 	publ_aceptaPreguntas bit DEFAULT 1
 	)
 GO
+
+PRINT 'INSERT Publicacion'
+
+SET IDENTITY_INSERT CLAVE_MOTOR.Publicacion ON;
+
+INSERT INTO CLAVE_MOTOR.Publicacion (publ_id,publ_descripcion,publ_stock,publ_fechaInicio,publ_fechaVencimiento,
+		publ_precio,publ_tipo,publ_estado,publ_idVisibilidad,publ_idUsuario,publ_idRubro)
+	(SELECT DISTINCT M.Publicacion_Cod,M.Publicacion_Descripcion,M.Publicacion_Stock,M.Publicacion_Fecha,M.Publicacion_Fecha_Venc,
+		M.Publicacion_Precio,
+		(SELECT CASE WHEN M.Publicacion_Tipo = 'Compra Inmediata' THEN 1
+					ELSE 2 END),
+		(SELECT CASE WHEN M.Publicacion_Estado = 'Publicada' THEN 1
+					ELSE 0 END),
+		M.Publicacion_Visibilidad_Cod,
+		(SELECT U.usua_id
+		FROM CLAVE_MOTOR.Usuario U
+		WHERE U.usua_username = CLAVE_MOTOR.FX_USERNAME_EMPRESA(M.Publ_Empresa_Razon_Social)),
+		(SELECT R.rubr_id
+		FROM CLAVE_MOTOR.Rubro R
+		WHERE R.rubr_descripcionCorta = M.Publicacion_Rubro_Descripcion)
+	FROM gd_esquema.Maestra M
+	WHERE M.Publ_Empresa_Cuit IS NOT NULL)
+
 ---------------------------------------------------------------------------
 CREATE TABLE CLAVE_MOTOR.Compra (
 	comp_id int IDENTITY(1,1) PRIMARY KEY,
